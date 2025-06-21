@@ -35,6 +35,19 @@ migrate_working_dir/
 .pub/
 /build/
 
+# iOS Flutter generated files
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Release.xcconfig
+ios/Runner.xcodeproj/project.pbxproj
+ios/Runner.xcworkspace/contents.xcworkspacedata
+ios/Podfile
+ios/Podfile.lock
+
+# macOS Flutter generated files
+macos/Flutter/Flutter-Debug.xcconfig
+macos/Flutter/Flutter-Release.xcconfig
+macos/Podfile
+
 # Symbolication related
 app.*.symbols
 
