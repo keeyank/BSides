@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'spotify_service.dart';
+import 'main_navigation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,37 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  Future<void> _testSpotifyAPI() async {
-    try {
-      final spotifyService = SpotifyService();
-      final result = await spotifyService.searchTracks("Hit me baby one more time", limit: 10);
-      print('Search result: $result');
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Spotify API Test'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _testSpotifyAPI,
-          child: const Text('Test Spotify API'),
-        ),
-      ),
+      home: const MainNavigation(),
     );
   }
 }
