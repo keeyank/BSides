@@ -104,10 +104,13 @@ class SpotifyService {
     return response;
   }
 
-  // Search for tracks
-  Future<Map<String, dynamic>> searchTracks(String query, {int limit = 20}) async {
+  // Search for Spotify data
+  Future<Map<String, dynamic>> search(String query, String type, {int limit = 20}) async {
     try {
-      final url = '${SpotifyConfig.baseUrl}/search?q=${Uri.encodeComponent(query)}&type=track&limit=$limit';
+      if (!({"track", "album"}.contains(type))) {
+        throw Exception('Search failed: $type is not a valid Spotify data type');
+      }
+      final url = '${SpotifyConfig.baseUrl}/search?q=${Uri.encodeComponent(query)}&type=$type&limit=$limit';
       final response = await _makeAuthenticatedRequest('GET', url);
 
       if (response.statusCode == 200) {

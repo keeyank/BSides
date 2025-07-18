@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
   Future<void> _testSpotifyAPI() async {
     try {
       final spotifyService = SpotifyService();
-      final result = await spotifyService.searchTracks("Hit me baby one more time", limit: 10);
+      final result = await spotifyService.search("Hit me baby one more time", "track", limit: 10);
       print('Search result: $result');
     } catch (e) {
       print('Error: $e');
