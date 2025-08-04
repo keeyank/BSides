@@ -10,6 +10,13 @@
             "webRenderer": "html"
         },
         {
+            "name": "Debug Flutter (iPhone)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "deviceId": "00008110-0004645E3CD0201E",
+        },
+        {
             "name": "Debug Flutter (Any Device)",
             "type": "dart",
             "request": "launch",

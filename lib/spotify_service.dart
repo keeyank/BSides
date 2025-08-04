@@ -50,6 +50,7 @@ class SpotifyService {
         throw Exception('Failed to refresh token: ${response.statusCode}');
       }
     } catch (e) {
+      print('HI ${SpotifyConfig.clientId}');
       print('Error refreshing token: $e');
       rethrow;
     }

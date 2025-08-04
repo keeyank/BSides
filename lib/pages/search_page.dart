@@ -1,3 +1,5 @@
+import 'package:bsides/pages/review_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../spotify_service.dart';
 
@@ -173,7 +175,10 @@ class _SearchPageState extends State<SearchPage> {
               overflow: TextOverflow.ellipsis,
             ),
             onTap: () {
-              // TODO: Handle album tap (navigate to album details)
+              Navigator.push(
+                context,
+                CupertinoPageRoute(builder: (context) => const ReviewPage())
+              );
               print('Tapped on: $albumName by $artistName');
             },
           ),
