@@ -1,15 +1,20 @@
 package main
 
 import (
-	"context"
+	"bsides/server/internal/models"
+	"database/sql"
 	"fmt"
 	"net/http"
 	"os"
 	"time"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
+
+type application struct {
+	albums *models.AlbumModel
+}
 
 func main() {
 	err := godotenv.Load(".env.local")
@@ -21,40 +26,43 @@ func main() {
 	addr := os.Getenv("SERVER_ADDR")
 	dsn := os.Getenv("DB_DSN")
 
-	conn, err := pgx.Connect(context.Background(), dsn)
+	db, err := openDB(dsn)
 	if err != nil {
-		fmt.Printf("Unable to connect to database: %v\n", err)
+		fmt.Printf("Unable to create connection pool: %v\n", err)
 		os.Exit(1)
 	}
-	defer conn.Close(context.Background())
+	defer db.Close()
 
-	// TODO:
-	// Get rid of this testing code
-	// Use a Connection Pool
-	// Convert this to use dependency injection using an App receiver
-
-	var greeting string
-	err = conn.QueryRow(context.Background(), "select 'Hello, world!'").Scan(&greeting)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
+	app := &application{
+		albums: &models.AlbumModel{DB: db},
 	}
-
-	fmt.Println(greeting)
-
-	mux := http.NewServeMux()
-	mux.HandleFunc("/ping", pingHandler)
 
 	srv := &http.Server{
 		Addr:         addr,
-		Handler:      mux,
+		Handler:      app.routes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
 
-	fmt.Printf("Starting server on %s", srv.Addr)
+	fmt.Printf("Starting server on %s\n", srv.Addr)
 	err = srv.ListenAndServe()
 	fmt.Printf("%v\n", err)
 	os.Exit(1)
+}
+
+// The openDB() function wraps sql.Open() and returns a sql.DB connection pool
+func openDB(dsn string) (*sql.DB, error) {
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.Ping()
+	if err != nil {
+		db.Close()
+		return nil, err
+	}
+
+	return db, nil
 }
